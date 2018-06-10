@@ -1,13 +1,59 @@
-﻿using System;
+﻿using WindowsFormsApplication1.Class;
 using System.Collections.Generic;
+using System;
+using System.Drawing;
 using System.Linq;
 using System.Text;
+
 
 namespace WindowsFormsApplication1
 {
     class GlobalVariables
     {
-       public static string IntroText = "Hello...";
+        static string _PlayerName;
+        public static string PlayerName
+        {
+            get { return _PlayerName; }
+            set { _PlayerName = value; }
+        }
+
+        static int _PlayerNameLength;
+        public static int PlayerNameLength
+        {
+            get { return _PlayerNameLength; }
+            set { _PlayerNameLength = value; }
+        }
+
+        static bool _PlayerWithName;
+        public static bool PlayerWithName
+        {
+            get { return _PlayerWithName; }
+            set { _PlayerWithName = value; }
+        }
+
+        #region Maze Variables
+        
+        
+        
+        static int _Height;
+        public static int Height
+        {
+            get { return _Height; }
+            set { _Height = value; }
+        }
+        
+        static int _Width;
+        public static int Width
+        {
+            get { return _Width; }
+            set { _Width = value; }
+        }
+        
+
+        #endregion
+        #region Dialogue
+
+        public static string IntroText = "Hello...";
 
        static bool _IsIntroString;
        public static bool IsIntroString
@@ -16,27 +62,7 @@ namespace WindowsFormsApplication1
            set { _IsIntroString = value; }
        }
 
-       static string _PlayerName;
-       public static string PlayerName
-       {
-           get { return _PlayerName; }
-           set { _PlayerName = value; }
-       }
-
-       static int _PlayerNameLength;
-       public static int PlayerNameLength
-       {
-           get { return _PlayerNameLength; }
-           set { _PlayerNameLength = value; }
-       }
-
-       static bool _PlayerWithName;
-       public static bool PlayerWithName
-       {
-           get { return _PlayerWithName; }
-           set { _PlayerWithName = value; }
-       }
-
+      
        public static string[,] IntroDialogue = new string[5,4]{
            {"Hello there...",
             "0",
@@ -122,5 +148,7 @@ namespace WindowsFormsApplication1
            "0"}
 
         };
+
+        #endregion
     }
 }
