@@ -65,6 +65,12 @@
     </Compile>
     <Compile Include="GlobalFunctions.cs" />
     <Compile Include="GlobalVariables.cs" />
+    <Compile Include="LightTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LightTest.Designer.cs">
+      <DependentUpon>LightTest.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>

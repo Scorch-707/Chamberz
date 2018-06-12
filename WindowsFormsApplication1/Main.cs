@@ -16,7 +16,9 @@ namespace WindowsFormsApplication1
 
         private Maze maze;
         private DateTime _start;
+        private List<Tuple<Cell, Direction>> item = new List<Tuple<Cell, Direction>>();
         Point currentPos = new Point();
+        Point[] GameBoard = new Point[49];
         int charctr = 1;
         int dialoguectr = 0;
         int Stage = 3;
@@ -209,8 +211,8 @@ namespace WindowsFormsApplication1
         public void StartMaze()
         {
             GlobalVariables.IsIntroString = false;
-            GlobalVariables.Height = 7;
-            GlobalVariables.Width = 7;
+            GlobalVariables.Height = 10;
+            GlobalVariables.Width = 10;
             maze = new Maze(GlobalVariables.Height, GlobalVariables.Width);
             maze.Generate();
 
@@ -218,6 +220,7 @@ namespace WindowsFormsApplication1
             currentPos.Y = maze.Start.Y;
             
             refreshGrid();
+            setGameBoard();
             updatePosition();
             
             IntroString.Visible = false;
@@ -227,22 +230,58 @@ namespace WindowsFormsApplication1
         #endregion
 
 
-        private void debug_Click(object sender, EventArgs e)
+        private void setGameBoard()
         {
-            Debug obj = new Debug(maze);
-            obj.Show();
-        }
+            int totalctr = 0;
+            int XMinRange = currentPos.X - 3;
+            int XMaxRange = currentPos.X + 4;
+            int YMinRange = currentPos.Y - 3;
+            int YMaxRange = currentPos.Y + 4;
 
+            for (int y = YMinRange; y < YMaxRange; y++)
+            {
+                for (int x = XMinRange; x < XMaxRange; x++)            
+                {
+                    GameBoard[totalctr].X = x;
+                    GameBoard[totalctr].Y = y;
+                    totalctr++;
+                }
+            }
+        }
         private void updatePosition()
         {
-            int startCellNumber = currentPos.X + ((currentPos.Y) * GlobalVariables.Width);
-            string startCellName = "Cell" + (startCellNumber + 1);
-            Button startCell = this.Controls.Find(startCellName, true).FirstOrDefault() as Button;
-            startCell.Visible = true;
-            startCell.Enabled = true;
-            MessageBox.Show("Current Position X: " + currentPos.X + "\n Current Position Y: " + currentPos.Y);
+            setGameBoard();
+                       
+            for (int x = 0; x < 49; x++)
+            {
+                string disableCellName = "Cell" + (x+1);
+                 
+                if (GameBoard[x].X < 0 || GameBoard[x].Y < 0 || GameBoard[x].X > GlobalVariables.Width || GameBoard[x].Y > GlobalVariables.Height)
+                {
+                    Button disableCell = this.Controls.Find(disableCellName, true).FirstOrDefault() as Button;
+                    disableCell.Visible = true;
+                    disableCell.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+                    disableCell.Enabled = false;
+                }
+                if (GameBoard[x].X >= 0 && GameBoard[x].Y >= 0 && GameBoard[x].X < GlobalVariables.Width && GameBoard[x].Y < GlobalVariables.Height)
+                {
+                    Button disableCell = this.Controls.Find(disableCellName, true).FirstOrDefault() as Button;
+                    disableCell.Visible = true;
+                    disableCell.BackColor = System.Drawing.SystemColors.AppWorkspace;
+                    disableCell.Enabled = false;       
+                }                
+            }
+
+            Cell25.Visible = true;
+            Cell25.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            Cell25.Enabled = true;
+
         }
 
+        public void DrawWalls(int x, int y)
+        {
+
+        }
         private void refreshGrid()
         {
             for (int x = 1; x <= 49; x++)
@@ -250,6 +289,7 @@ namespace WindowsFormsApplication1
                 string disableCellName = "Cell" + x;
                 Button disableCell = this.Controls.Find(disableCellName, true).FirstOrDefault() as Button;
                 disableCell.Visible = true;
+                disableCell.BackColor = System.Drawing.SystemColors.ControlDarkDark;
                 disableCell.Enabled = false;
             }
         }
@@ -294,18 +334,35 @@ namespace WindowsFormsApplication1
             }
         }
 
+        private int getPosition(int x, int y)
+        {
+            int cellnum = 0;
+         
+            foreach (Tuple<Cell, Direction> item in maze.Points)
+            {
+                if (item.Item1.Point.X == x && item.Item1.Point.Y == y)
+                {
+                    return cellnum;
+                }
+                else
+                    cellnum++;
+            }
+            return cellnum;
+        }
         private void Main_KeyDown(object sender, KeyEventArgs e)
         {
             int up, down, left, right;
+            
+
             if (e.KeyCode == Keys.W || e.KeyCode == Keys.Up)
-            {            
+            {
                 up = currentPos.Y - 1; //Going up
 
                 if (up >= 0)
                 {
-                    if (maze.Board[currentPos.X, currentPos.Y].NorthWall)
+                    if (maze.Points[getPosition(currentPos.X, currentPos.Y)].Item1.NorthWall)
                     {
-                        MessageBox.Show("You've reached a wall going up");
+                        MessageBox.Show("You've bumped to a wall");
                     }
                     else
                     {
@@ -316,18 +373,18 @@ namespace WindowsFormsApplication1
                 }
                 else
                 {
-                    MessageBox.Show("You've reach a wall going up (end wall)");
+                    MessageBox.Show("You've bumped to a wall");
                 }
             }
             if (e.KeyCode == Keys.A || e.KeyCode == Keys.Left)
             {
                 left = currentPos.X - 1; //Going up
-                
+
                 if (left >= 0)
                 {
-                    if (maze.Board[currentPos.X, currentPos.Y].WestWall)
+                    if (maze.Points[getPosition(currentPos.X, currentPos.Y)].Item1.WestWall)
                     {
-                        MessageBox.Show("You've reached a wall going left");
+                        MessageBox.Show("You've bumped to a wall");
                     }
                     else
                     {
@@ -338,18 +395,18 @@ namespace WindowsFormsApplication1
                 }
                 else
                 {
-                    MessageBox.Show("You've reach a wall going left (end wall)");               
+                    MessageBox.Show("You've bumped to a wall");
                 }
             }
             if (e.KeyCode == Keys.S || e.KeyCode == Keys.Down)
             {
                 down = currentPos.Y + 1;
 
-                if (down <= GlobalVariables.Height-1)
+                if (down < GlobalVariables.Height)
                 {
-                    if (maze.Board[currentPos.X, currentPos.Y].SouthWall)
+                    if (maze.Points[getPosition(currentPos.X, currentPos.Y)].Item1.SouthWall)
                     {
-                        MessageBox.Show("You've reached a wall going down");
+                        MessageBox.Show("You've bumped to a wall");
                     }
                     else
                     {
@@ -360,18 +417,19 @@ namespace WindowsFormsApplication1
                 }
                 else
                 {
-                    MessageBox.Show("You've reach a wall going down (end wall)");
+                    MessageBox.Show("You've bumped to a wall");
                 }
+                
             }
             if (e.KeyCode == Keys.D || e.KeyCode == Keys.Right)
             {
                 right = currentPos.X + 1;
 
-                if (right <= (GlobalVariables.Width)
+                if (right < GlobalVariables.Width)
                 {
-                    if (maze.Board[currentPos.X, currentPos.Y].EastWall)
+                    if (maze.Points[getPosition(currentPos.X, currentPos.Y)].Item1.EastWall)
                     {
-                        MessageBox.Show("You've reached a wall going right");
+                        MessageBox.Show("You've bumped to a wall");
                     }
                     else
                     {
@@ -382,19 +440,58 @@ namespace WindowsFormsApplication1
                 }
                 else
                 {
-                    MessageBox.Show("You've reach a wall going right (end wall)");
+                    MessageBox.Show("You've bumped to a wall");
                 }
             }
         }
 
         #endregion
 
+
+        #region Debug Options 
+
+        private void debug_Click(object sender, EventArgs e)
+        {
+            Debug obj = new Debug(maze);
+            obj.Show();
+        }
+
         private void PingPosition_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Current Position X: " + currentPos.X + "\n Current Position Y: " + currentPos.Y);
         }
 
-      
+        private void lightTest_Click(object sender, EventArgs e)
+        {
+            LightTest obj = new LightTest();
+            obj.Show();
+        }
 
+        #endregion
+
+        
+        private void gameBoardArray_Click(object sender, EventArgs e)
+        {
+            string message = "";
+            int ctr = 0;
+            int subctr = 1;
+
+            setGameBoard();
+            
+            foreach(Point point in GameBoard)
+            {
+                
+                message += "["+ctr+"]: "+point.X+","+point.Y+"  ";
+                if (subctr == 7)
+                {
+                    message += "\n";
+                    subctr = 0;
+                }
+                subctr++;
+                ctr++;
+
+            }
+            MessageBox.Show(message);
+        }
     }
 }

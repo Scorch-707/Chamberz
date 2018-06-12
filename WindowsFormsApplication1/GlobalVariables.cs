@@ -33,8 +33,6 @@ namespace WindowsFormsApplication1
 
         #region Maze Variables
         
-        
-        
         static int _Height;
         public static int Height
         {
