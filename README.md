@@ -1,6 +1,13 @@
-# Chamberz
-a small text based rpg
- 
-Left click on the screen to move to the next dialogue
-Use WASD to move
-DEBUG - show maze
+Chamberz
+====================
+
+Is a small text based rpg game inside
+a maze.
+
+Features
+------------------
+- Maze Generation (Uses the Recursive Backtracker Algorithm)
+- Companion Bot (WIP)
+- Infinite dungeons (WIP)
+- RPG Style Combat (Not implemented yet)
+
