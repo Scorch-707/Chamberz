@@ -46,8 +46,13 @@ namespace WindowsFormsApplication1
             get { return _Width; }
             set { _Width = value; }
         }
-        
 
+        static int _DetectRange;
+        public static int DetectRange
+        {
+            get { return _DetectRange; }
+            set { _DetectRange = value; }
+        }
         #endregion
         #region Dialogue
 

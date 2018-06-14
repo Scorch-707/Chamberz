@@ -213,6 +213,7 @@ namespace WindowsFormsApplication1
             GlobalVariables.IsIntroString = false;
             GlobalVariables.Height = 10;
             GlobalVariables.Width = 10;
+            GlobalVariables.DetectRange = 3;
             maze = new Maze(GlobalVariables.Height, GlobalVariables.Width);
             maze.Generate();
 
@@ -248,53 +249,106 @@ namespace WindowsFormsApplication1
                 }
             }
         }
+
         private void updatePosition()
         {
             setGameBoard();
-                       
-            for (int x = 0; x < 49; x++)
+              
+            for (int ctr = 0; ctr < 49; ctr++)
             {
-                string disableCellName = "Cell" + (x+1);
-                 
-                if (GameBoard[x].X < 0 || GameBoard[x].Y < 0 || GameBoard[x].X > GlobalVariables.Width || GameBoard[x].Y > GlobalVariables.Height)
-                {
-                    Button disableCell = this.Controls.Find(disableCellName, true).FirstOrDefault() as Button;
-                    disableCell.Visible = true;
-                    disableCell.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-                    disableCell.Enabled = false;
-                }
-                if (GameBoard[x].X >= 0 && GameBoard[x].Y >= 0 && GameBoard[x].X < GlobalVariables.Width && GameBoard[x].Y < GlobalVariables.Height)
-                {
-                    Button disableCell = this.Controls.Find(disableCellName, true).FirstOrDefault() as Button;
-                    disableCell.Visible = true;
-                    disableCell.BackColor = System.Drawing.SystemColors.AppWorkspace;
-                    disableCell.Enabled = false;       
-                }                
+                    string gridName = "Grid" + (ctr + 1);
+                    Panel grid = this.Controls.Find(gridName, true).FirstOrDefault() as Panel;
+           
+                    string disableCellName = "Cell" + (ctr + 1);
+
+             
+                    if (GameBoard[ctr].X >= 0 && GameBoard[ctr].Y >= 0 && GameBoard[ctr].X < GlobalVariables.Width && GameBoard[ctr].Y < GlobalVariables.Height)
+                    {
+                        Panel disableCell = this.Controls.Find(disableCellName, true).FirstOrDefault() as Panel;
+                        disableCell.Visible = true;
+                        disableCell.BackColor = System.Drawing.SystemColors.AppWorkspace;
+                        disableCell.Enabled = false;
+                        DrawWalls(GameBoard[ctr].X, GameBoard[ctr].Y, grid);
+                    }
+                    if (GameBoard[ctr].X < 0 || GameBoard[ctr].Y < 0 || GameBoard[ctr].X >= GlobalVariables.Width || GameBoard[ctr].Y >= GlobalVariables.Height)
+                    {
+                        Panel disableCell = this.Controls.Find(disableCellName, true).FirstOrDefault() as Panel;
+                        disableCell.Visible = true;
+                        disableCell.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+                        disableCell.Enabled = false;
+                        grid.Padding = new Padding(0, 0, 0, 0);
+                    }
             }
+            
 
             Cell25.Visible = true;
             Cell25.BackColor = System.Drawing.SystemColors.MenuHighlight;
             Cell25.Enabled = true;
 
+            DetectPath();
         }
 
-        public void DrawWalls(int x, int y)
+        public void DetectPath()
         {
+           
+                if (!(maze.Points[getPosition(currentPos.X, currentPos.Y)].Item1.NorthWall))
+                {
+                    for (int x = 0; x < GlobalVariables.DetectRange; x++)
+                    {
 
+                    }
+                }
+                if (!(maze.Points[getPosition(currentPos.X, currentPos.Y)].Item1.EastWall))
+                {
+
+                }
+                if (!(maze.Points[getPosition(currentPos.X, currentPos.Y)].Item1.SouthWall))
+                {
+
+                }
+                if (!(maze.Points[getPosition(currentPos.X, currentPos.Y)].Item1.WestWall))
+                {
+
+                }
+            
+        }
+
+        public void DrawWalls(int x, int y, Panel grid) 
+        {
+            int North = 0, East = 0, South = 0, West = 0; 
+              
+            if (maze.Points[getPosition(x,y)].Item1.NorthWall)
+            {  
+                North = 2;          
+            }
+            if (maze.Points[getPosition(x,y)].Item1.EastWall)
+            {
+                East = 2;
+            }
+            if (maze.Points[getPosition(x,y)].Item1.SouthWall)
+            {
+                South = 2;
+            }
+            if (maze.Points[getPosition(x,y)].Item1.WestWall)
+            {
+                West = 2;
+            }
+
+            grid.Padding = new Padding(West,North,East,South);
         }
         private void refreshGrid()
         {
             for (int x = 1; x <= 49; x++)
             {
                 string disableCellName = "Cell" + x;
-                Button disableCell = this.Controls.Find(disableCellName, true).FirstOrDefault() as Button;
+                Panel disableCell = this.Controls.Find(disableCellName, true).FirstOrDefault() as Panel;
                 disableCell.Visible = true;
                 disableCell.BackColor = System.Drawing.SystemColors.ControlDarkDark;
                 disableCell.Enabled = false;
             }
         }
-
-
+        
+       
         #region Key bindings
         
         protected override bool IsInputKey(Keys keyData)
@@ -467,8 +521,6 @@ namespace WindowsFormsApplication1
             obj.Show();
         }
 
-        #endregion
-
         
         private void gameBoardArray_Click(object sender, EventArgs e)
         {
@@ -492,6 +544,8 @@ namespace WindowsFormsApplication1
 
             }
             MessageBox.Show(message);
+
         }
+        #endregion
     }
 }

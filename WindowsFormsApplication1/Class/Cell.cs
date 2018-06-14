@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace WindowsFormsApplication1.Class
 {
@@ -18,4 +19,6 @@ namespace WindowsFormsApplication1.Class
         public Point Point;
         public int visited_count = 0;
     }
+
+    
 }
