@@ -46,13 +46,22 @@ namespace WindowsFormsApplication1
             get { return _Width; }
             set { _Width = value; }
         }
-
+            
         static int _DetectRange;
         public static int DetectRange
         {
             get { return _DetectRange; }
             set { _DetectRange = value; }
         }
+
+        static PointF _MousePos;
+        public static PointF MousePos
+        {
+            get { return _MousePos; }
+            set { _MousePos = value; }
+        }
+
+
         #endregion
         #region Dialogue
 

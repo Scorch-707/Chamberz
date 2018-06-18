@@ -7,3 +7,4 @@ C:\Users\user\Documents\My Files\Chamberz\WindowsFormsApplication1\obj\Debug\Win
 C:\Users\user\Documents\My Files\Chamberz\WindowsFormsApplication1\obj\Debug\Dungeonz.csproj.GenerateResource.Cache
 C:\Users\user\Documents\My Files\Chamberz\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
 C:\Users\user\Documents\My Files\Chamberz\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
+C:\Users\user\Documents\My Files\Chamberz\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.LightTest.resources

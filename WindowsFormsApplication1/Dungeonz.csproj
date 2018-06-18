@@ -82,6 +82,9 @@
     <EmbeddedResource Include="Debug.resx">
       <DependentUpon>Debug.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="LightTest.resx">
+      <DependentUpon>LightTest.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
       <SubType>Designer</SubType>
